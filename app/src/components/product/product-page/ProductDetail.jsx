@@ -7,7 +7,7 @@ import History from './History'
 import { getPastEvents,
 	getEventFilterProduct } from '../../../store/events-helpers'
 import { getEventsAboutProduct } from "../../../store/selectors"
-import Loading from '../../Loading';
+import Loading from '../../load/Loading';
 import ProductLink from './ProductLink'
 
 class ProductDetail extends React.Component {

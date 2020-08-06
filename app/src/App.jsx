@@ -6,17 +6,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import drizzleOptions from "./store/drizzleOptions";
-import drizzleStore from "./store/store";
+import getOptions from "./store/drizzleOptions";
+import getStore from "./store/store";
 import Home from "./components/Home";
 import HeaderBar from "./components/HeaderBar";
 import ProductDetail from './components/product/product-page/ProductDetail'
-import LoadingContainer from "./components/LoadingContainer";
+import LoadingContainer from "./components/load/LoadingContainer";
 import "./App.css";
 
-const drizzle = new Drizzle(drizzleOptions, drizzleStore);
 
-const App = () => {
+const App = ({ library }) => {
+  const drizzle = new Drizzle(getOptions(library), getStore(library));
+
   return (
     <DrizzleContext.Provider drizzle={drizzle}>
       <ToastContainer

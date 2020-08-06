@@ -1,4 +1,9 @@
 const path = require("path");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+
+const developmentMnemonic =
+  "finger retreat rude front release kid equal swear sibling habit beyond dwarf";
+const INFURA_API_KEY = "72e095878aea473da1f797032f5c3e4f";
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -14,12 +19,22 @@ module.exports = {
       host: "127.0.0.1",
       port: 8545,
       network_id: "*"
-    }
+    },
+    kovan: {
+      provider: () => new HDWalletProvider(developmentMnemonic, "https://kovan.infura.io/v3/" + INFURA_API_KEY),
+      network_id: 42,
+      gas: 6000000,
+      gasPrice: 10000000000
+    },
   },
   // Configure your compilers
   compilers: {
     solc: {
       version: "0.5.5",    // Fetch exact version from solc-bin (default: truffle's version)
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
     }
   },
   plugins: ["solidity-coverage"]
