@@ -5,44 +5,61 @@ import SupplierPanel from './supplier/SupplierPanel';
 import DeliveryManPanel from './delivery-man/DeliveryManPanel';
 import CustomerPanel from './customer/CustomerPanel';
 import Loading from './loading/Loading';
+import { call, get } from '../strategies';
 
 class Home extends React.Component {
 	state = {
-		dataKeyOwner: null,
-		dataKeySupplier: null,
-		dataKeyDeliveryMan: null
+		owner: null,
+		isSupplier: null,
+		isDeliveryMan: null
 	};
 
-	componentDidMount() {
+  async init() {
+    const { drizzle, drizzleState } = this.props;
+
+    console.log(drizzleState.offline.offline);
+
+    this.setState({ owner: await call(drizzleState, drizzle, 'getOwner') });
+
+    this.setState({
+      isSupplier: await call(drizzleState, drizzle, 'isSupplier', [drizzleState.accounts[0]])
+    });
+
+    this.setState({
+      isDeliveryMan: await call(drizzleState, drizzle, 'isDeliveryMan', [drizzleState.accounts[0]])
+    });
+  }
+
+	async componentDidMount() {
 		// this.props.drizzle.web3.eth.defaultAccount = this.props.drizzleState.accounts[0] //don't work
-
-		const { drizzle, drizzleState } = this.props;
-
-		const dataKeyOwner = drizzle.contracts.Logistic.methods.getOwner.cacheCall();
-		this.setState({ dataKeyOwner });
-
-		const dataKeySupplier = drizzle.contracts.Logistic.methods.isSupplier
-		.cacheCall(drizzleState.accounts[0]);
-		this.setState({ dataKeySupplier });
-
-		const dataKeyDeliveryMan = drizzle.contracts.Logistic.methods.isDeliveryMan
-		.cacheCall(drizzleState.accounts[0]);
-		this.setState({ dataKeyDeliveryMan });
+    await this.init()
 	}
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState !== this.state) {
+      console.log("init");
+      await this.init()
+    }
+  }
 
   render () {
     const { drizzle, drizzleState } = this.props;
-    const { Logistic } = drizzleState.contracts;
+    console.log(drizzleState.offline.offline);
 
-    const owner = Logistic.getOwner[this.state.dataKeyOwner];
-    const isSupplier = Logistic.isSupplier[this.state.dataKeySupplier];
-    const isDeliveryMan = Logistic.isDeliveryMan[this.state.dataKeyDeliveryMan];
+    const owner = get(drizzleState, 'getOwner', this.state.owner) || this.state.owner;
+    const isSupplier = get(drizzleState, 'isSupplier', this.state.isSupplier) || this.state.isSupplier;
+    const isDeliveryMan = get(drizzleState, 'isDeliveryMan', this.state.isDeliveryMan) || this.state.isDeliveryMan;
 
-    if (!owner || !isSupplier || !isDeliveryMan) {
-      return <Loading/>
-    }
+    console.log(owner);
+    console.log(isSupplier);
+    console.log(isDeliveryMan);
+    console.log(this.state);
+    //
+    // if (!owner || !isSupplier || !isDeliveryMan) {
+    //   return <Loading/>
+    // }
 
-    if (owner.value === drizzleState.accounts[0]) {
+    if (owner === drizzleState.accounts[0]) {
       return (
         <OwnerPanel
           drizzle={drizzle}
@@ -51,7 +68,7 @@ class Home extends React.Component {
       )
     }
 
-    if (isSupplier.value) {
+    if (isSupplier) {
       return (
         <SupplierPanel
           drizzle={drizzle}
@@ -60,7 +77,7 @@ class Home extends React.Component {
       )
     }
 
-    if (isDeliveryMan.value) {
+    if (isDeliveryMan) {
       return (
         <DeliveryManPanel
           drizzle={drizzle}

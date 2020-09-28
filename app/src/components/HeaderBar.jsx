@@ -4,10 +4,11 @@ import { Navbar, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import Address from "./product/Address"
+import { setOffline } from '../store/actions'
 
 const { AccountData } = newContextComponents;
 
-export default function({ drizzle, drizzleState }) {
+export default ({ drizzle, drizzleState }) => {
 	const [pathSearch, setPathSearch] = useState("");
 
 	return (
@@ -52,6 +53,16 @@ export default function({ drizzle, drizzleState }) {
 							)
 						}}
 						/>
+				</Nav>
+				<Nav>
+					<Button
+						size="sm"
+						onClick={() => {
+							drizzle.store.dispatch(setOffline(true))
+						}}
+					>
+						Go offline
+					</Button>
 				</Nav>
 			</Navbar.Collapse>
 		</Navbar>

@@ -1,10 +1,12 @@
 import {
   ADD_EVENT,
-  ADD_ALL_EVENTS
+  ADD_ALL_EVENTS,
+  OFFLINE
 } from './actions'
 
 const initialState = {
-  events: []
+  events: [],
+  offline: false
 }
 
 export function eventsReducer(state = initialState, action) {
@@ -25,6 +27,17 @@ export function eventsReducer(state = initialState, action) {
         .sort((a, b) => {
           return b.blockNumber - a.blockNumber
         })
+      })
+    default:
+      return state
+  }
+}
+
+export function offlineReducer(state = initialState, action) {
+  switch (action.type) {
+    case OFFLINE:
+      return Object.assign({}, state, {
+        offline: action.offline
       })
     default:
       return state

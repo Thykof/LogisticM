@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 export const ADD_EVENT = 'ADD_EVENT'
 export const ADD_ALL_EVENTS = 'ADD_ALL_EVENTS'
+export const OFFLINE = 'OFFLINE'
 
 export function addEvent(event, action) {
   event.eventName = getEventName(event)
@@ -16,4 +17,11 @@ export function addAllEvents(events) {
     return event
   })
   return { type: ADD_ALL_EVENTS, events }
+}
+
+export function setOffline(offline) {
+    return {
+        type: OFFLINE,
+        offline
+    }
 }
