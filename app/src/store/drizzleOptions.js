@@ -1,17 +1,19 @@
 // let drizzle know what contracts we want and how to access our test blockchain
 
-import OwnedRegistry from "../contracts/OwnedRegistry.json";
+import OwnedRegistry from '../contracts/OwnedRegistry.json'
 
 export default function getDrizzleOptions(web3) {
+  // const address = OwnedRegistry.address;
+  const address = '0x8328a01304Cd7EC9A124E60609E8d032A1bD40A1' // deployed contract on ropsten
   return {
     contracts: [
-        {
-            contractName: 'OwnedRegistry',
-            web3Contract: new web3.eth.Contract(OwnedRegistry.abi, '0x8328a01304Cd7EC9A124E60609E8d032A1bD40A1')
-        }
+      {
+        contractName: 'OwnedRegistry',
+        web3Contract: new web3.eth.Contract(OwnedRegistry.abi, address),
+      },
     ],
     events: {
-      LogisticM: ["ProxyCreated"]
+      LogisticM: ['ProxyCreated'],
     },
     // web3: {
     //   fallback: {
@@ -29,4 +31,4 @@ export default function getDrizzleOptions(web3) {
     //   // customProvider: new Web3("wss://kovan.infura.io/ws/v3/5b2a79e624554c8ab922b9a84b076645"),
     // },
   }
-};
+}
