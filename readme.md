@@ -56,9 +56,9 @@ Finally, we create the proxy.
 
 First of all, you will need some ethereum. Use this faucet: <https://faucet.metamask.io>.
 
-In the `truffle-config.js` file, set the variables (be careful to not put it on github):
- - `mnemonic`: of your wallet,
- - `apiKey`: your infura API key.
+Copy the file `.env.dist` into a file `.env` and file the variables:
+ - `MNEMONIC`: of your wallet,
+ - `INFURA_KEY`: your infura API key.
 
 Then, run `migrate --network ropsten`
 
